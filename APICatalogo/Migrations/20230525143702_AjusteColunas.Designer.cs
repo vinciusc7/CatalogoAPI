@@ -3,6 +3,7 @@ using System;
 using APICatalogo.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace APICatalogo.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230525143702_AjusteColunas")]
+    partial class AjusteColunas
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,8 +35,8 @@ namespace APICatalogo.Migrations
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasMaxLength(85)
-                        .HasColumnType("varchar(85)");
+                        .HasMaxLength(80)
+                        .HasColumnType("varchar(80)");
 
                     b.HasKey("CategoriaId");
 
@@ -54,8 +57,8 @@ namespace APICatalogo.Migrations
 
                     b.Property<string>("Descricao")
                         .IsRequired()
-                        .HasMaxLength(350)
-                        .HasColumnType("varchar(350)");
+                        .HasMaxLength(300)
+                        .HasColumnType("varchar(300)");
 
                     b.Property<float>("Estoque")
                         .HasColumnType("float");
@@ -67,11 +70,11 @@ namespace APICatalogo.Migrations
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasMaxLength(85)
-                        .HasColumnType("varchar(85)");
+                        .HasMaxLength(80)
+                        .HasColumnType("varchar(80)");
 
                     b.Property<decimal>("Preco")
-                        .HasColumnType("decimal(11,2)");
+                        .HasColumnType("decimal(10,2)");
 
                     b.HasKey("ProdutoId");
 
