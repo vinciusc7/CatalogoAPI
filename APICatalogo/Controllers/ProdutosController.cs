@@ -26,7 +26,7 @@ namespace APICatalogo.Controllers
             }
             return produtos;
         }
-        [HttpGet("{id:int}", Name="ObterProduto")]
+        [HttpGet("{id:int}", Name ="ObterProduto")]
         public ActionResult<Produto> Get(int id)
         {
             var produto = _context.Produtos.FirstOrDefault(x => x.ProdutoId == id);
