@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace APICatalogo.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230525151830_PopulaProdutos")]
-    partial class PopulaProdutos
+    [Migration("20230725003058_'MigracaoInicial'")]
+    partial class MigracaoInicial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -74,7 +74,7 @@ namespace APICatalogo.Migrations
                         .HasColumnType("varchar(85)");
 
                     b.Property<decimal>("Preco")
-                        .HasColumnType("decimal(11,2)");
+                        .HasColumnType("decimal(10,2)");
 
                     b.HasKey("ProdutoId");
 
