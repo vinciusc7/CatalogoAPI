@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using APICatalogo.Context;
 using APICatalogo.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace APICatalogo.Controllers
 {
@@ -17,10 +18,10 @@ namespace APICatalogo.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Produto>> Get()
+        public async Task<ActionResult<IEnumerable<Produto>>> Get()
         {
             try {
-                var produtos = _context.Produtos?.Take(2).ToList();
+                var produtos = await _context.Produtos?.AsNoTracking().ToListAsync();
                 if (produtos is null) {
                     return NotFound("Não existem produtos cadastrados!");
                 }
@@ -34,9 +35,10 @@ namespace APICatalogo.Controllers
         }
 
         [HttpGet("primeiro")]
-        public ActionResult<Produto> GetPrimeiroProduto() {
+        public async Task<ActionResult<Produto>> GetPrimeiroProduto() {
             try {
-                var produto = _context.Produtos?.FirstOrDefault();
+                var  produtos = await _context.Produtos.ToListAsync();
+                var produto = produtos.FirstOrDefault();
                 if (produto is null) {
                     return NotFound("Não existem produtos cadastrados!");
                 }
@@ -48,9 +50,9 @@ namespace APICatalogo.Controllers
             }
         }
         [HttpGet("ByCategory/{id:int:min(1)}")]
-        public ActionResult<IEnumerable<Produto>> GetByCategory(int id) {
+        public async Task<ActionResult<IEnumerable<Produto>>> GetByCategory(int id) {
             try {
-                var produtos = _context.Produtos?.Where(x => x.CategoriaID == id).ToList();
+                var produtos = await _context.Produtos?.Where(x => x.CategoriaID == id).ToListAsync();
                 if (produtos is null) {
                     return NotFound("Nenhum produto atrelado a esta categoria");
                 }
@@ -65,10 +67,10 @@ namespace APICatalogo.Controllers
         }
 
         [HttpGet("{id:int:min(1)}", Name ="ObterProduto")]
-        public ActionResult<Produto> Get(int id)
+        public async Task<ActionResult<Produto>> Get(int id, [BindRequired] string nome)
         {
             try {
-                var produto = _context.Produtos?.FirstOrDefault(x => x.ProdutoId == id);
+                var produto = await _context.Produtos?.FirstOrDefaultAsync(x => x.ProdutoId == id);
                 if (produto is null) {
                     return BadRequest("Produto não encontrado!");
                 }
@@ -80,14 +82,14 @@ namespace APICatalogo.Controllers
             
         }
         [HttpPost]
-        public ActionResult Post(Produto produto)
+        public async Task<ActionResult> Post(Produto produto)
         {
             try {
                 if (produto is null) {
                     return BadRequest("Nenhum produto inserido");
                 }
                 _context.Produtos?.Add(produto);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
                 return new CreatedAtRouteResult("ObterProduto",
                     new { id = produto.ProdutoId }, produto);
             }
@@ -112,7 +114,7 @@ namespace APICatalogo.Controllers
 
                 _context.Entry(produto).State = EntityState.Modified;
                 _context.SaveChanges();
-                return Ok(produto);
+                return  Ok(produto);
             }
             catch (Exception) {
                 return StatusCode(StatusCodes.Status500InternalServerError);
@@ -120,17 +122,17 @@ namespace APICatalogo.Controllers
             
         }
         [HttpDelete("{id:int:min(1)}")]
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
             try {
-                var produto = _context.Produtos?.FirstOrDefault(p => p.ProdutoId == id);
+                var produto = await _context.Produtos?.FirstOrDefaultAsync(p => p.ProdutoId == id);
                 if (produto is null) {
                     return NotFound("Nenhum produto encontrado com este ID!");
                 }
-                _context.Entry(produto).State = EntityState.Deleted;
-                _context.SaveChanges();
+                _context.Remove(produto);
+                await _context.SaveChangesAsync();
 
-                return Ok($"O produto {produto.Nome?.ToString()} deletado com sucesso!");
+                return Ok($"O produto '{produto.Nome?.ToString()}' deletado com sucesso!");
             }
             catch (Exception) {
 
