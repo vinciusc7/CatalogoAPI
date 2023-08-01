@@ -30,11 +30,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+//middleware para redirecionar para https
 app.UseHttpsRedirection();
 
+//middleware que habilita a autorização
 app.UseAuthorization();
 
+//adiciona o middleware que executa o endpoint
 app.MapControllers();
 
 app.Run();

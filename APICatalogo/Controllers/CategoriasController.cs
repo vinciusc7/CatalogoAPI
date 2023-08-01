@@ -12,9 +12,11 @@ namespace APICatalogo.Controllers
     public class CategoriasController : ControllerBase
     {
         private readonly AppDbContext _context;
-        public CategoriasController(AppDbContext context)
+        private readonly IConfiguration _configuration;
+        public CategoriasController(AppDbContext context, IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
         }
 
         [HttpGet("saudacao/{nome}")]
@@ -26,6 +28,18 @@ namespace APICatalogo.Controllers
         {
             return _context.Categorias.Take(2).Include(p => p.Produtos).ToList();
 
+        }
+        [HttpGet("autor")]
+        public IActionResult GetAutor()
+        {
+            var autor = _configuration["autor"];
+            var conexao = _configuration["ConnectionStrings:DefaultConnection"];
+            if (autor is null && conexao is null)
+            {
+                return BadRequest("Nenhum autor e conexão encontrado");
+            }
+            return Ok($"autor: {autor}  " +
+                $"\n\n conexão: {conexao}");
         }
 
         [HttpGet]

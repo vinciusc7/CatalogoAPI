@@ -42,7 +42,7 @@ public class Produto : IValidatableObject
             var primeiraLetra = this.Nome[0].ToString();
             if (primeiraLetra != primeiraLetra.ToUpper())
             {
-                yield return new ValidationResult("A primeira letra do produto deve ser maíscula",
+                yield return new ValidationResult("A primeira letra do produto deve ser maíscula ",
                     new[]
                     {  nameof(this.Nome) });
             }
