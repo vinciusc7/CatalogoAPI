@@ -75,6 +75,7 @@ namespace APICatalogo.Controllers
                 {
                     return BadRequest();
                 }
+                
                 _context.Add(categoria);
                 _context.SaveChanges();
 

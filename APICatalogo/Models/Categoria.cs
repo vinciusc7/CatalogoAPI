@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using APICatalogo.Validation;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
@@ -15,6 +16,7 @@ public class Categoria
     [Key]
     public int CategoriaId { get; set; }
     [Required]
+    [PrimeiraLetraMaiuscula]
     [StringLength(85)]
     public string? Nome { get; set; }
     [Required]
