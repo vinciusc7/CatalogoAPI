@@ -5,6 +5,8 @@ using APICatalogo.Services;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 using APICatalogo.Extensions;
+using APICatalogo.Loggin;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -28,6 +30,12 @@ builder.Services.AddTransient<IMeuServico, MeuServico>();
 
 var app = builder.Build();
 
+ILoggerFactory loggerFactory = new LoggerFactory();
+
+loggerFactory.AddProvider(new CustomLoggerProvider(new CustomLoggerProviderConfiguration
+{
+    LogLevel = LogLevel.Information
+}));
 app.ConfigureExceptionHandler();
 
 // Configure the HTTP request pipeline.

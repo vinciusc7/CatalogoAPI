@@ -13,10 +13,12 @@ namespace APICatalogo.Controllers
     {
         private readonly AppDbContext _context;
         private readonly IConfiguration _configuration;
-        public CategoriasController(AppDbContext context, IConfiguration configuration)
+        private readonly ILogger _logger;
+        public CategoriasController(AppDbContext context, IConfiguration configuration, ILogger<CategoriasController> logger)
         {
             _context = context;
             _configuration = configuration;
+            _logger = logger;
         }
 
         [HttpGet("saudacao/{nome}")]
@@ -26,6 +28,7 @@ namespace APICatalogo.Controllers
         [HttpGet("Produtos")]
         public ActionResult<IEnumerable<Categoria>> GetCategoriasProdutos()
         {
+            _logger.LogInformation("====================== GET api/categorias/produtos ======================");
             return _context.Categorias.Take(2).Include(p => p.Produtos).ToList();
 
         }
@@ -47,6 +50,8 @@ namespace APICatalogo.Controllers
         {
             try
             {
+                _logger.LogInformation("====================== GET api/categorias/ ======================");
+
                 var categorias = _context.Categorias.ToList();
                 if (categorias is null)
                 {
@@ -65,6 +70,8 @@ namespace APICatalogo.Controllers
         {
             try
             {
+                _logger.LogInformation("========================= GET api/categorias/id  =========================");
+
                 var categoria = _context.Categorias.FirstOrDefault(c => c.CategoriaId == id);
                 if (categoria is null)
                 {
